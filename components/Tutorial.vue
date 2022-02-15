@@ -1,16 +1,13 @@
 <!-- Please remove this file from your project -->
 <template>
-  <div
-    class="
-      relative
-      items-top
-      mx-auto
-      min-h-screen
-      sm:items-center sm:pt-0
-    "
-  >
+  <div class="relative items-top mx-auto min-h-screen sm:items-center sm:pt-0">
     <div class="flex justify-center my-8">
-      <input type="button" class="bg-indigo-500 px-4 text-white py-1 cursor-pointer rounded-md" value="Clear" @click="clearCanvas()" />
+      <input
+        type="button"
+        class="bg-indigo-500 px-4 text-white py-1 cursor-pointer rounded-md"
+        value="Clear"
+        @click="clearCanvas()"
+      />
     </div>
     <div class="flex justify-center">
       <canvas
@@ -42,17 +39,23 @@ export default {
   methods: {
     DrawClick(e) {
       const pos = this.getMousePos(this.canvas, e)
-
-      if (this.posini && this.pointsClick.length <= 4) {
+      if (this.posini && this.pointsClick.length < 4) {
         if (this.pointsClick.length < 4) {
           this.context.fillRect(pos.x, pos.y, 5, 5)
         }
-
         this.context.beginPath()
-        this.context.strokeStyle = '#000'
-        this.context.moveTo(this.posini.x, this.posini.y)
-        this.context.lineTo(pos.x, pos.y)
-        this.context.stroke()
+
+        if (this.pointsClick.length === 3) {
+          this.context.moveTo(this.posini.x, this.posini.y)
+          this.context.lineTo(pos.x, pos.y)
+          this.context.lineTo(this.pointsClick[0].x, this.pointsClick[0].y)
+          this.context.stroke()
+        } else {
+          this.context.strokeStyle = '#000'
+          this.context.moveTo(this.posini.x, this.posini.y)
+          this.context.lineTo(pos.x, pos.y)
+          this.context.stroke()
+        }
       } else {
         this.posini = ''
         this.pointsClick = []
